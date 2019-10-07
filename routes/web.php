@@ -14,3 +14,21 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
+
+
+
+Route::get('/broadcast', function () {
+
+    event(new \App\Events\TaskEvent('Hello this is task event message'));
+    //return view('broadcast');
+});
+
+Route::get('/listener', function () {
+
+    return view('listener');
+});
+
