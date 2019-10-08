@@ -10,7 +10,13 @@
 </head>
 
 <body>
-broadcast
+
+<form action="{{route('broadcast_post')}}" method="post">
+
+    @csrf
+    <input type="text" name="txt">
+    <input type="submit" value="send data">
+</form>
 </body>
 
 </html>

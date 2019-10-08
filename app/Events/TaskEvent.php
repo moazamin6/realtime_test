@@ -33,6 +33,6 @@ class TaskEvent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('testChannel');
+        return new Channel('testChannel');
     }
 }
