@@ -33,13 +33,31 @@ const app = new Vue({
    el: '#app',
 
    data: {
-      broadcastData: ''
+      broadcastData: '',
+      authID: '',
    },
    created() {
-      window.Echo.channel('testChannel')
-          .listen('TaskEvent', (e) => {
-             this.broadcastData = e.message;
-             //console.log(this.broadcastData);
-          });
+
+      this.getAuthID();
+
+
+   },
+   methods: {
+      getAuthID() {
+         axios.get('http://localhost:8080/realtime_test/public/auth/user')
+             .then((response) => {
+                this.authID = response.data.id;
+
+                window.Echo.private('chat-' + this.authID)
+                    .listen('ChatEvent', (e) => {
+                       // this.broadcastData = e.message;
+                       // console.log(e);
+                       this.broadcastData = e.message;
+                    });
+             });
+      }
+   },
+   mounted() {
+
    }
 });

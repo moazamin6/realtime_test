@@ -59200,15 +59200,26 @@ Vue.component('example-component', __webpack_require__(/*! ./components/ExampleC
 var app = new Vue({
   el: '#app',
   data: {
-    broadcastData: ''
+    broadcastData: '',
+    authID: ''
   },
   created: function created() {
-    var _this = this;
+    this.getAuthID();
+  },
+  methods: {
+    getAuthID: function getAuthID() {
+      var _this = this;
 
-    window.Echo.channel('testChannel').listen('TaskEvent', function (e) {
-      _this.broadcastData = e.message; //console.log(this.broadcastData);
-    });
-  }
+      axios.get('http://localhost:8080/realtime_test/public/auth/user').then(function (response) {
+        _this.authID = response.data.id;
+        window.Echo["private"]('chat-' + _this.authID).listen('ChatEvent', function (e) {
+          // this.broadcastData = e.message;
+          console.log(e);
+        });
+      });
+    }
+  },
+  mounted: function mounted() {}
 });
 
 /***/ }),
@@ -59256,7 +59267,8 @@ window.Pusher = __webpack_require__(/*! pusher-js */ "./node_modules/pusher-js/d
 window.Echo = new laravel_echo__WEBPACK_IMPORTED_MODULE_0__["default"]({
   broadcaster: 'pusher',
   key: '167de64f4fbd3b7d931e',
-  cluster: 'ap2'
+  cluster: 'ap2',
+  authEndpoint: 'http://localhost:8080/realtime_test/public/broadcasting/auth'
 });
 
 /***/ }),

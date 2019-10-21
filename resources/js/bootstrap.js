@@ -38,4 +38,5 @@ window.Echo = new Echo({
    broadcaster: 'pusher',
    key: '167de64f4fbd3b7d931e',
    cluster: 'ap2',
+   authEndpoint: 'http://localhost:8080/realtime_test/public/broadcasting/auth'
 });

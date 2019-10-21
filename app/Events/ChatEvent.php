@@ -10,10 +10,11 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class TaskEvent implements ShouldBroadcast
+class ChatEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+    public $user;
     public $message;
 
     /**
@@ -21,8 +22,9 @@ class TaskEvent implements ShouldBroadcast
      *
      * @return void
      */
-    public function __construct($message)
+    public function __construct($user, $message)
     {
+        $this->user = $user;
         $this->message = $message;
     }
 
@@ -33,6 +35,6 @@ class TaskEvent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel('testChannel');
+        return new PrivateChannel('chat-' . $this->user->id);
     }
 }

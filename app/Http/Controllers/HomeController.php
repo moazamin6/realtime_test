@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\ChatEvent;
 use App\Events\TaskEvent;
+use App\User;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -14,7 +16,7 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        //$this->middleware('auth');
+        $this->middleware('auth');
     }
 
     /**
@@ -24,13 +26,18 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $users = User::all();
+
+        return view('home')
+            ->with('users', $users);
     }
 
-    public function broadcast(Request $request)
+    public function messagePost(Request $request)
     {
-        event(new TaskEvent($request->txt));
-        return redirect()->route('broadcast');
+//        return $request->message;
+        $user = User::find($request->user_select);
+        $message = $request->message;
+        event(new ChatEvent($user, $message));
         //return $request;
     }
 }
